@@ -6,3 +6,4 @@ __pycache__/
 test.db
 collect.py
 run_collect.bat
+project_summary.md
