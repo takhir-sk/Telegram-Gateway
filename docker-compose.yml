@@ -10,7 +10,7 @@ services:
       timeout: 5s
       retries: 5
 
-  hookbridge:
+  telegram-gateway:
     build: .
     ports:
       - "8000:8000"
@@ -29,7 +29,7 @@ services:
       timeout: 5s
       retries: 3
     volumes:
-      - app_logs:/var/log/hookbridge
+      - app_logs:/var/log/telegram-gateway
 
 networks:
   proxy-net:
