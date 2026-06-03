@@ -84,7 +84,6 @@ async def _handle_set_webhook(
     hook_id = str(uuid.uuid4())
     gateway_url = f"{settings.GATEWAY_PUBLIC_URL}/hook/{hook_id}"
 
-    # 1–2. Сохранить mapping в MySQL (промпт: сначала БД)
     try:
         await service.replace_hook_for_token(
             hook_id=hook_id,
@@ -147,7 +146,7 @@ async def _handle_get_webhook_info(token: str, service: WebhookService):
 async def _handle_delete_webhook(
     token: str, body: bytes, service: WebhookService
 ):
-    # 1. Удалить из БД (промпт: сначала БД)
+    
     await service.delete_hooks_by_token(token)
 
     headers = {}
@@ -173,7 +172,6 @@ async def _handle_delete_webhook(
 @router.get("/hook/{hook_id}")
 async def verify_hook(hook_id: str):
     """Telegram webhook verification"""
-    # Можно проверить, существует ли hook в БД, но не обязательно.
     return Response(status_code=200, content="OK")
     
 

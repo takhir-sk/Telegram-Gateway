@@ -44,8 +44,6 @@ class Settings(BaseSettings):
     ALLOW_HTTP_TARGETS: bool = False
 
 
-    AUTO_CREATE_TABLES: bool = False
-
     @field_validator("GATEWAY_PUBLIC_URL")
     @classmethod
     def normalize_gateway_url(cls, value: str) -> str:

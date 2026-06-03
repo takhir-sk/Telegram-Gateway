@@ -3,5 +3,6 @@ __pycache__/
 .env
 .venv/
 *.log
-alembic/versions/*.pyc
 test.db
+collect.py
+run_collect.bat

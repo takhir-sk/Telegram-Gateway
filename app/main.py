@@ -28,17 +28,15 @@ logger = structlog.get_logger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if settings.AUTO_CREATE_TABLES:
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
 
     redis = await get_redis()
     service = WhitelistService(redis)
     try:
         await service.refresh_cache()
     except ProgrammingError:
-        # First start before migrations: whitelist tables may not exist yet.
-        logger.warning("Whitelist cache refresh skipped: run alembic upgrade head")
+        logger.warning(
+            "Whitelist cache refresh skipped: database tables are not initialized"
+        )
     logger.info("Application started", app_env=settings.APP_ENV)
     yield
     await close_redis()
