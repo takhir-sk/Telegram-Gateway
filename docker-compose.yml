@@ -1,0 +1,39 @@
+services:
+  redis:
+    image: redis:7-alpine
+    networks:
+      - proxy-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  telegram-gateway:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - proxy-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - app_logs:/var/log/telegram-gateway
+
+networks:
+  proxy-net:
+    external: true
+
+volumes:
+  app_logs:
